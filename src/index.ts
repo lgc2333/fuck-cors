@@ -75,6 +75,10 @@ const INTRO_HTML = `
             <code lang="js">real-referer</code>
             <i>(可选)</i> - 要传给源站的 Referer
           </li>
+          <li>
+            <code lang="js">real-origin</code>
+            <i>(可选)</i> - 要传给源站的 Origin
+          </li>
         </ul>
 
         <p>就可以愉快地到处 <code>fetch</code> 啦！</p>
@@ -99,7 +103,7 @@ fuckCors();</pre
         <p>
           <small>
             Site By <a href="https://lgc2333.top">lgc2333</a> |
-            <a href="https://github.com/lgc2333/fuck-cors">Github</a>
+            <a href="https://github.com/lgc2333/fuck-cors">GitHub</a>
           </small>
         </p>
       </div>
