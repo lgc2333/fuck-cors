@@ -87,7 +87,7 @@ const url = 'https://fuck-cors.lgc2333.top/setu/v2';
 async function fuckCors() {
   // 实际上访问的是 api.lolicon.app
   const resp = await fetch(url, {
-    headers: { upstream_url: 'api.lolicon.app' },
+    headers: { 'upstream-host': 'api.lolicon.app' },
   });
   const json = await resp.json();
   console.log(json);
@@ -115,6 +115,16 @@ export default {
   async fetch(request) {
     const { method, url: reqUrl, headers: reqHeaders } = request;
 
+    if (method === 'OPTIONS') {
+      const headers = new Headers();
+      headers.set('access-control-allow-origin', '*');
+      headers.set('access-control-allow-credentials', 'true');
+      headers.set('access-control-allow-methods', '*');
+      headers.set('access-control-allow-headers', '*');
+      headers.set('access-control-expose-headers', '*');
+      return new Response(null, { status: 200, headers });
+    }
+
     const upstreamUrl = reqHeaders.get('upstream-host');
     if (!upstreamUrl) {
       return new Response(INTRO_HTML, {
@@ -122,7 +132,8 @@ export default {
       });
     }
 
-    const realReferer = reqHeaders.get('real-referer') || undefined;
+    const realReferer = reqHeaders.get('real-referer');
+    const realOrigin = reqHeaders.get('real-origin');
 
     const proxyReqUrl = new URL(reqUrl);
     proxyReqUrl.host = upstreamUrl;
@@ -130,9 +141,13 @@ export default {
     const proxyReqUrlStr = proxyReqUrl.toString();
 
     const proxyReqHeaders = new Headers(reqHeaders);
+    proxyReqHeaders.delete('origin');
+    proxyReqHeaders.delete('referer');
     proxyReqHeaders.delete('upstream-url');
     proxyReqHeaders.delete('real-referer');
+    proxyReqHeaders.delete('real-origin');
     if (realReferer) proxyReqHeaders.set('referer', realReferer);
+    if (realOrigin) proxyReqHeaders.set('origin', realOrigin);
 
     const proxyResponse = await fetch(proxyReqUrlStr, {
       method,
@@ -146,7 +161,7 @@ export default {
 
     const respHeaders = new Headers(proxyResponse.headers);
     respHeaders.set('access-control-allow-origin', '*');
-    respHeaders.set('access-control-allow-credentials', '*');
+    respHeaders.set('access-control-allow-credentials', 'true');
     respHeaders.set('access-control-allow-methods', '*');
     respHeaders.set('access-control-allow-headers', '*');
     respHeaders.set('access-control-expose-headers', '*');
