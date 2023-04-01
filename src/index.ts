@@ -46,7 +46,7 @@ const INTRO_HTML = `
         height: 100%;
       }
 
-      #box {
+      .text-box {
         padding: 10px 30px;
         text-align: center;
         border-radius: 10px;
@@ -59,7 +59,7 @@ const INTRO_HTML = `
 
   <body>
     <div class="flex">
-      <div id="box">
+      <div class="text-box">
         <h1>CORS，我测你码</h1>
 
         <p>
