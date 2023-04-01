@@ -1,0 +1,13 @@
+name = "fuck-cors"
+main = "src/index.ts"
+compatibility_date = "2023-04-01"
+usage_model = "bundled"
+env = { }
+
+[route]
+pattern = "fuck-cors.lgc2333.top/*"
+zone_name = ""
+script = "fuck-cors"
+
+[triggers]
+crons = [ ]
